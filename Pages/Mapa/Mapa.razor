@@ -1,0 +1,83 @@
+﻿@page "/Mapa"
+@inject IAccidenteService AccidenteService
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<SfMaps>
+    <MapsTitleSettings Text="Localizacion de los accidentes">
+    </MapsTitleSettings>
+    <MapsLayers>
+        <MapsLayer ShapeData="@MapShapeData" DataSource="@StatusDetails"
+                   ShapePropertyPath='@("name")' ShapeDataPath="Name">
+            <MapsLegendSettings Visible="true"></MapsLegendSettings>
+            <MapsLayerTooltipSettings Visible="true" ValuePath="Name">
+            </MapsLayerTooltipSettings>
+            <MapsDataLabelSettings Visible="true" LabelPath="Name">
+            </MapsDataLabelSettings>
+            <MapsShapeSettings ColorValuePath="SeverityLevel" Fill="#E5E5E5">
+                <MapsShapeColorMappings>
+                    <MapsShapeColorMapping Color="@("#a69d70")" Value="High">
+                    </MapsShapeColorMapping>
+                    <MapsShapeColorMapping Color="@("#A4D6AD")" Value="Moderate">
+                    </MapsShapeColorMapping>
+                    <MapsShapeColorMapping Color="@("#DEEBAE")" Value="Low">
+                    </MapsShapeColorMapping>
+                </MapsShapeColorMappings>
+            </MapsShapeSettings>
+        </MapsLayer>
+    </MapsLayers>
+</SfMaps>
+
+
+@code {
+
+    //public Accidente accidente = new Accidente()
+    //{
+    //    Lugar,
+
+    //};
+
+    public class CountryData
+    {
+        public string Name { get; set; }
+        public string SeverityLevel { get; set; }
+    }
+
+    public List<CountryData> StatusDetails = new List<CountryData>
+{
+         new CountryData { Name= "United States", SeverityLevel= "High"},
+         new CountryData { Name= "Russia", SeverityLevel= "High" },
+         new CountryData { Name= "Spain", SeverityLevel= "High"},
+         new CountryData { Name= "Brazil", SeverityLevel= "High"},
+         new CountryData { Name= "United Kingdom", SeverityLevel= "High"},
+         new CountryData { Name= "Italy", SeverityLevel= "High"},
+         new CountryData { Name= "India", SeverityLevel= "High"},
+         new CountryData { Name= "Australia", SeverityLevel= "Moderate"},
+         new CountryData { Name= "Finland", SeverityLevel= "Moderate"},
+         new CountryData { Name= "Argentina", SeverityLevel= "Moderate"},
+         new CountryData { Name= "Iceland", SeverityLevel= "Moderate"},
+         new CountryData { Name= "Greenland", SeverityLevel= "Low"},
+         new CountryData { Name= "Mongolia", SeverityLevel= "Low"},
+         new CountryData { Name= "Vietnam", SeverityLevel= "Low"},
+         new CountryData { Name= "Bermuda", SeverityLevel= "Low"}
+    };
+
+    public class MapDataSettings
+    {
+        public Boolean async { get; set; }
+        public String dataOptions { get; set; }
+        public String type { get; set; }
+    }
+    public MapDataSettings MapShapeData = new MapDataSettings
+    {
+        async = true,
+        type = "GET",
+        dataOptions = "scripts/MapsData/world-map.json"
+    };
+
+}
+

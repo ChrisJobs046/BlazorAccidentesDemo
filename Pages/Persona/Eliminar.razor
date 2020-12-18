@@ -1,0 +1,62 @@
+﻿@page "/PersonaEliminar/{id}"
+@inject IPersonaService PersonaService
+@inject NavigationManager NavigationManager
+
+<h1>Eliminar Personas</h1>
+<p style="color:red;text-align:center">Esta seguro de que desea eliminar esta persona</p>
+
+<EditForm Model="@persona">
+    <table class="table">
+        <tr>
+            <td>Nombre:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="persona.Nombre" /></td>
+        </tr>
+        <tr>
+            <td>Apellido:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="persona.Apellido" /></td>
+        </tr>
+        <tr>
+            <td>Telefono:</td>
+            <td><input class="form-control col-sm-4" type="password" @bind="persona.Telefono" /></td>
+        </tr>
+        <tr>
+            <td>Correo:</td>
+            <td><input class="form-control col-sm-4" type="email" @bind="persona.Correo" /></td>
+        </tr>
+        <tr>
+            <td>Cedula:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="persona.Cedula" /></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="submit" value="Save" @onclick="DeletePersona" />
+                <input type="button" value="Cancel" @onclick="Cancel" />
+            </td>
+        </tr>
+    </table>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    private Persona persona = new Persona();
+
+    protected override async Task OnInitializedAsync()
+    {
+        persona = await PersonaService.GetPersonaDetails(id);
+    }
+
+    protected async Task DeletePersona()
+    {
+        await PersonaService.DeletePersona(id);
+        NavigationManager.NavigateTo("IndexPersona");
+    }
+
+    protected void Cancel()
+    {
+        NavigationManager.NavigateTo("/IndexPersona");
+    }
+}

@@ -1,0 +1,98 @@
+﻿@page "/IndexAccidente"
+@inject IAccidenteService AccidenteService
+
+<h1>Accidente</h1>
+
+<p>Esta Pag muestra la lista de todas las personas</p>
+@Message
+
+<div>
+    <a href="/CrearAccidente"><i>Agregar Accidentes</i></a>
+</div>
+
+@if (accidentes == null)
+{
+    <p><em>Cargando....</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Descripcion</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Lugar</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <thead>
+            <tr>
+                <th>
+                    Personas
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var accidente in accidentes)
+            {
+                <tr>
+                    <td>@accidente.Descripcion</td>
+                    <td>@accidente.Fecha</td>
+                    <td>@accidente.Hora</td>
+                    <td>@accidente.Lugar</td>
+                    <td>@accidente.Latitud</td>
+                    <td>@accidente.Longitud</td>
+                    <td>@accidente.Personas</td>
+                    <td><a href="/IndexPersona/@accidente.AccidenteId"><i>Editar</i></a></td>
+                    <td><a href="/PersonaEliminar/@accidente.AccidenteId"><i>Borrar</i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    public IEnumerable<Accidente> accidentes { get; set; }
+    public string Message { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            accidentes = await AccidenteService.GetAllAccidente();
+        }
+        catch (Exception e)
+        {
+
+            Message = e.Message;
+        }
+    }
+
+    ////Accidente Accidentes = new Accidente();
+    ////Persona[] Personas { get; set; }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await CargarPersonas();
+    //}
+
+    //async Task CargarPersonas()
+    //{
+    //    //using(var httpClient = new HttpClient())
+    //    //{
+    //    //    httpClient.BaseAddress = new Uri("https://localhost:44395/");
+    //    //    httpClient.DefaultRequestHeaders.Clear();
+    //    //    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+    //    //    var response = await httpClient.GetAsync("api/Persona");
+    //    //    var result = response.Content.ReadAsStringAsync().Result;
+
+    //    //    Console.WriteLine(result);
+    //    //}
+    //}
+}

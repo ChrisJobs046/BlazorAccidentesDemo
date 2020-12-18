@@ -1,0 +1,126 @@
+﻿@page "/CrearAccidente"
+@page "/CrearAccidente/{id:int}"
+@inject IAccidenteService AccidenteService 
+@inject NavigationManager NavigationManager
+
+<h1>Accidentes</h1>
+
+<EditForm Model="@accidente"> 
+    <table class="table">
+        <tr>
+            <td>Descripcion:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Descripcion" /></td>
+        </tr>
+        <tr>
+            <td>Fecha:</td>
+            <td><input class="form-control col-sm-4" type="datetime" @bind="accidente.Fecha" /></td>
+        </tr>
+        <tr>
+            <td>Hora:</td>
+            <td><input class="form-control col-sm-4" type="date" @bind="accidente.Hora" /></td>
+        </tr>
+        <tr>
+            <td>Lugar:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Lugar" /></td>
+        </tr>
+        <tr>
+            <td>Latitud:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Latitud" /></td>
+        </tr>
+        <tr>
+            <td>Latitud:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Longitud" /></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="submit" value="Save" @onclick="SaveAccidente" />
+                <input type="button" value="Cancel" @onclick="Cancel" />
+            </td>
+        </tr>
+    </table>
+</EditForm>
+
+@*@if (Personas == null)
+{
+    <text>Cargando....</text>
+}
+else if (Personas.Count == 0)
+{
+    <text>No hay personas en la  base de datos</text>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Id</th>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var persona in Personas)
+            {
+                <tr>
+                    <td>
+                        <a class="btn btn-success">Editar</a>
+                        <button class="btn btn-danger">Borrar</button>
+                    </td>
+                    <td>@persona.PersonaId</td>
+                    <td>@persona.Nombre</td>
+                </tr>
+            }*
+        </tbody>
+    </table>
+}*@
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    private Accidente accidente = new Accidente();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(id != 0)
+        {
+            accidente = await AccidenteService.GetAccidenteDetails(id);
+        }
+    }
+
+    protected async Task SaveAccidente()
+    {
+        await AccidenteService.SaveAccidente(accidente);
+        NavigationManager.NavigateTo("IndexAccidente");
+    }
+
+    protected void Cancel()
+    {
+        NavigationManager.NavigateTo("IndexAccidente");
+    }
+
+    //Persona[] Personas { get; set; }
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    await CargarPersonas();
+    //}
+
+    //async Task CargarPersonas()
+    //{
+    //    //Personas = await Http.GetFromJsonAsync<List<Persona>>("api/persona");
+
+    //    //using(var httpClient = new HttpClient())
+    //    //{
+    //    //    httpClient.BaseAddress = new Uri("https://localhost:44395/");
+    //    //    httpClient.DefaultRequestHeaders.Clear();
+    //    //    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+    //    //    var response = await httpClient.GetAsync("api/Persona");
+    //    //    var result = response.Content.ReadAsStringAsync().Result;
+
+    //    //    Console.WriteLine(result);
+    //    //}
+    //}
+}

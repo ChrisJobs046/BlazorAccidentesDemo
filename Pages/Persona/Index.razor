@@ -1,0 +1,64 @@
+﻿@page "/IndexPersona"
+@inject IPersonaService PersonaService
+
+<h1>Personas</h1>
+
+<p>Esta Pag muestra la lista de todas las personas</p>
+@Message
+
+<div>
+    <a href="/CrearPersona"><i>Agregar persona</i></a>
+</div>
+
+@if (personas == null)
+{
+    <p><em>Cargando....</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Cedula</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var persona in personas)
+            {
+            <tr>
+                <td>@persona.Nombre</td>
+                <td>@persona.Apellido</td>
+                <td>@persona.Telefono</td>
+                <td>@persona.Correo</td>
+                <td>@persona.Cedula</td>
+                <td><a href="/IndexPersona/@persona.PersonaId"><i>Editar</i></a></td>
+                <td><a href="/PersonaEliminar/@persona.PersonaId"><i>Borrar</i></a></td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    public IEnumerable<Persona> personas { get; set; }
+    public string Message { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            personas = await PersonaService.GetAllPersona();
+        }
+        catch (Exception e)
+        {
+
+            Message = e.Message;
+        }
+    }
+}

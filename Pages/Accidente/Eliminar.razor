@@ -1,0 +1,66 @@
+﻿@page "/AccidenteEliminar/{id}"
+@inject IAccidenteService AccidenteService
+@inject NavigationManager NavigationManager
+
+<h1>Eliminar Accidente</h1>
+<p style="color:red;text-align:center">Esta seguro de que desea eliminar este accidente</p>
+
+<EditForm Model="@accidente">
+    <table class="table">
+        <tr>
+            <td>Descripcion:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Descripcion" /></td>
+        </tr>
+        <tr>
+            <td>Fecha:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Fecha" /></td>
+        </tr>
+        <tr>
+            <td>Hora:</td>
+            <td><input class="form-control col-sm-4" type="password" @bind="accidente.Hora" /></td>
+        </tr>
+        <tr>
+            <td>Lugar:</td>
+            <td><input class="form-control col-sm-4" type="email" @bind="accidente.Lugar" /></td>
+        </tr>
+        <tr>
+            <td>Latitud:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Latitud" /></td>
+        </tr>
+        <tr>
+            <td>Longitud:</td>
+            <td><input class="form-control col-sm-4" type="text" @bind="accidente.Longitud" /></td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="text-align:center">
+                <input type="submit" value="Save" @onclick="DeleteAccidente" />
+                <input type="button" value="Cancel" @onclick="Cancel" />
+            </td>
+        </tr>
+    </table>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public int id { get; set; }
+
+    private Accidente accidente = new Accidente();
+
+    protected override async Task OnInitializedAsync()
+    {
+        accidente = await AccidenteService.GetAccidenteDetails(id);
+    }
+
+    protected async Task DeleteAccidente()
+    {
+        await AccidenteService.DeleteAccidente(id);
+        NavigationManager.NavigateTo("IndexAccidente");
+    }
+
+    protected void Cancel()
+    {
+        NavigationManager.NavigateTo("/IndexAccidente");
+    }
+}
